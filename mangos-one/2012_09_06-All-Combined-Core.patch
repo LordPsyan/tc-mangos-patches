@@ -1322,26 +1322,26 @@ index d953efe..12c0f87 100644
  }
  
 +// DEV -- These functions should only be used in development mode - not on a production server
-+bool ChatHandler::HandleReloadGameobjectTemplateCommand(const char*)
++bool ChatHandler::HandleReloadGameobjectTemplateCommand(char*)
 +{
 +    sLog.outString( "WARNING: Reloading gameobject_template" );
-+    objmgr.LoadGameobjectInfo();
++    sObjectMgr.LoadGameobjectInfo();
 +    SendGlobalSysMessage("WARNING: DB table `gameobject_template` reloaded.");
 +    return true;
 +}
 +
-+bool ChatHandler::HandleReloadItemTemplateCommand(const char*)
++bool ChatHandler::HandleReloadItemTemplateCommand(char*)
 +{
 +    sLog.outString( "WARNING: Reloading item_template" );
-+    objmgr.LoadItemPrototypes();
++    sObjectMgr.LoadItemPrototypes();
 +    SendGlobalSysMessage("WARNIONG: DB table `item_template` reloaded.");
 +    return true;
 +}
 +
-+bool ChatHandler::HandleReloadCreatureTemplateCommand(const char*)
++bool ChatHandler::HandleReloadCreatureTemplateCommand(char*)
 +{
 +    sLog.outString( "WARNING: Reloading creature_template" );
-+    objmgr.LoadCreatureTemplates();
++    sObjectMgr.LoadCreatureTemplates();
 +    SendGlobalSysMessage("WARNING: DB table `creature_template` reloaded.");
 +    return true;
 +}
