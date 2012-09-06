@@ -174,7 +174,7 @@ index 58b3c7c..0069906 100644
  extern void AddSC_battleground();
  
  // custom
-+extern void void AddSC_npc_rentalmount();
++extern void AddSC_npc_rentalmount();
  
  // examples
  extern void AddSC_example_creature();
@@ -182,7 +182,7 @@ index 58b3c7c..0069906 100644
      AddSC_battleground();
  
      // custom
-+    void AddSC_npc_rentalmount();
++    AddSC_npc_rentalmount();
  
      // examples
      AddSC_example_creature();

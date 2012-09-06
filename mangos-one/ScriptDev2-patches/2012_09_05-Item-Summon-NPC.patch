@@ -67,7 +67,7 @@ index 58b3c7c..9b22d69 100644
  extern void AddSC_battleground();
  
  // custom
-+extern void void AddSC_summon();
++extern void AddSC_summon();
  
  // examples
  extern void AddSC_example_creature();
@@ -75,7 +75,7 @@ index 58b3c7c..9b22d69 100644
      AddSC_battleground();
  
      // custom
-+    void AddSC_summon();
++    AddSC_summon();
  
      // examples
      AddSC_example_creature();
