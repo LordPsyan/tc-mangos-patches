@@ -121,7 +121,7 @@ index 0000000..7adfec7
 +        if (i < TabCatDest.size())
 +            player->ADD_GOSSIP_ITEM(7, NEXT_PAGE, GOSSIP_NEXT_PAGEC, 0);
 +
-+        player->SEND_GOSSIP_MENU(MSG_CAT, creature->GetGUID());
++        player->SEND_GOSSIP_MENU(MSG_CAT, creature->GetObjectGuid());
 +    }
 +
 +    // Display destination categories
@@ -142,7 +142,7 @@ index 0000000..7adfec7
 +        if (CatDest::CountOfCategoryAllowedBy(player) > 1)
 +            player->ADD_GOSSIP_ITEM(7, MAIN_MENU, GOSSIP_MAIN_MENU, 0);
 +
-+        player->SEND_GOSSIP_MENU(MSG_DEST, creature->GetGUID());
++        player->SEND_GOSSIP_MENU(MSG_DEST, creature->GetObjectGuid());
 +    }
 +
 +    // Verification before teleportation
