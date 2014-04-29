@@ -1,0 +1,282 @@
+From 3310ff52157374a0fec20ffe126b32db9fd6f5dc Mon Sep 17 00:00:00 2001
+From: LordPsyan <realmsofwarcraft@gmail.com>
+Date: Fri, 18 Apr 2014 07:36:15 -0500
+Subject: [PATCH] 2014_04_18-Fake_Players
+
+---
+ sql/extras/characters-characters_fake-full.sql     | 35 +++++++++++++++++++++
+ .../characters-characters_fake-structure.sql       | 31 +++++++++++++++++++
+ sql/extras/characters_fake_readme.txt              | 18 +++++++++++
+ sql/extras/trinity_string_fake_players.sql         |  8 +++++
+ src/server/game/Entities/Player/Player.cpp         |  4 +++
+ src/server/game/Handlers/ChatHandler.cpp           |  9 ++++++
+ src/server/game/Handlers/MiscHandler.cpp           | 36 ++++++++++++++++++++--
+ src/server/game/Miscellaneous/Language.h           |  1 +
+ src/server/game/World/World.cpp                    |  1 +
+ src/server/game/World/World.h                      |  1 +
+ src/server/worldserver/worldserver.conf.dist       |  8 +++++
+ 11 files changed, 150 insertions(+), 2 deletions(-)
+ create mode 100644 sql/extras/characters-characters_fake-full.sql
+ create mode 100644 sql/extras/characters-characters_fake-structure.sql
+ create mode 100644 sql/extras/characters_fake_readme.txt
+ create mode 100644 sql/extras/trinity_string_fake_players.sql
+
+diff --git a/sql/extras/characters-characters_fake-full.sql b/sql/extras/characters-characters_fake-full.sql
+new file mode 100644
+index 0000000..aed3ab5
+--- /dev/null
++++ b/sql/extras/characters-characters_fake-full.sql
+@@ -0,0 +1,35 @@
++/*
++SQLyog Enterprise - MySQL GUI v8.18 
++MySQL - 5.5.31-0+wheezy1 : Database - fake_characters
++*********************************************************************
++*/
++
++/*!40101 SET NAMES utf8 */;
++
++/*!40101 SET SQL_MODE=''*/;
++
++/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
++/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
++/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
++/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
++/*Table structure for table `characters_fake` */
++
++DROP TABLE IF EXISTS `characters_fake`;
++
++CREATE TABLE `characters_fake` (
++  `name` varchar(36) NOT NULL,
++  `race` mediumint(3) NOT NULL DEFAULT '0',
++  `class` mediumint(3) NOT NULL DEFAULT '0',
++  `level` mediumint(3) NOT NULL DEFAULT '0',
++  `zone` mediumint(9) NOT NULL DEFAULT '0',
++  `gender` mediumint(3) NOT NULL DEFAULT '0'
++) ENGINE=MyISAM DEFAULT CHARSET=latin1;
++
++/*Data for the table `characters_fake` */
++
++insert  into `characters_fake`(`name`,`race`,`class`,`level`,`zone`,`gender`) values ('Drikish',2,8,18,30,0),('Sovelis',1,1,71,38,0),('Cuddles',2,2,62,33,0),('Epiasdv',8,4,16,26,0),('Mac',5,4,51,34,0),('Tiesto',8,6,45,44,0),('Ihavfacebook',11,7,72,16,1),('Mimik',2,4,66,49,0),('Deadmau',5,4,31,33,0),('Smoosh',8,1,39,40,0),('Shadowcrest',4,4,17,38,1),('Lolol',4,5,49,4,1),('Prox',11,1,33,7,1),('Rovip',3,4,18,33,0),('Ryan',7,8,69,37,0),('Holysmite',1,2,48,21,0),('Airagon',6,2,33,41,0),('Fracture',5,1,22,42,0),('Supershen',3,2,11,36,1),('Jana',2,6,64,3,0),('Gamm',2,1,49,7,0),('Emoarchie',6,8,52,25,0),('Melia',1,2,33,4,1),('Balu',6,11,4,33,0),('Jabari',2,1,5,25,0),('Sinan',10,2,11,7,0),('Shisha',10,4,38,19,1),('Killbill',1,4,76,7,0),('Gaby',4,11,24,7,1),('Fallen',4,4,51,23,0),('Druidita',6,11,24,26,0),('Pigolo',6,11,46,10,0),('Saga',5,2,78,24,0),('Deadmask',10,2,9,40,0),('Assasincz',4,6,50,25,0),('Petracz',1,4,64,6,1),('Aleks',10,2,8,3,0),('Cazadormen',4,4,7,46,1),('Kireth',1,2,10,33,1),('Liesma',1,1,29,20,1),('Tyller',1,1,33,34,0),('Astrabutaz',1,2,77,8,0),('Carlita',7,8,44,37,1),('Beanie',10,2,70,13,0),('Nergal',10,3,55,1,0),('Smikis',10,5,63,18,0),('Peperoma',11,2,70,37,0),('May',1,2,5,30,1),('Keyadis',8,7,34,36,0),('Preatorian',10,2,5,42,0),('Mitza',1,9,81,50,0),('Keedor',10,2,69,24,0),('Kekw',4,3,22,33,1),('Wark',1,2,63,34,0),('Barrabus',10,2,7,5,0),('Malodetehepy',4,11,5,23,0),('Dranati',10,2,79,1,0),('Sorin',2,1,62,34,0),('Resan',4,4,73,18,0),('Silverhilt',1,1,15,38,1),('Chirica',10,2,18,36,0),('Trias',10,8,44,14,0),('Prdo',5,1,5,11,0),('Guten',8,7,49,12,0),('Sonsia',4,3,73,27,1),('Smikiss',10,4,54,49,0),('Ledy',4,1,50,13,1),('Rymar',5,6,8,17,0),('Rokass',5,1,50,45,0),('Waisha',10,3,64,24,1),('Xenon',4,1,8,34,0),('Palanoski',1,2,8,49,0),('Helona',6,11,13,41,1),('Skalons',2,1,42,10,0),('Zazlock',5,9,11,25,0),('Zazk',6,7,8,43,0),('Ezekiel',10,9,7,40,0),('Deiv',10,8,11,21,0),('Crashwar',5,1,30,33,0),('Bandaid',5,5,36,1,0),('Hunterherbie',4,3,10,7,0),('Cheesebeard',3,1,20,30,0),('Phin',7,6,68,31,0),('Prig',6,5,41,15,0),('Eraevel',6,5,78,32,1),('Bourne',5,4,28,12,0),('Twoogi',5,8,65,13,0),('Devon',5,6,5,27,0),('Ledystar',1,2,50,6,1),('Frostie',3,8,6,43,1),('Kie',5,4,38,33,0),('Reios',1,2,9,10,0),('Zero',4,4,13,6,0),('Wuk',2,1,38,47,0),('Sylvaediir',4,3,69,17,0),('Kansetsu',11,2,68,42,0),('Makura',11,2,52,10,1),('Demonia',11,2,55,24,1),('Stonebull',6,11,37,39,0),('Marianus',10,2,19,33,0);
++
++/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
++/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
++/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
++/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+diff --git a/sql/extras/characters-characters_fake-structure.sql b/sql/extras/characters-characters_fake-structure.sql
+new file mode 100644
+index 0000000..d5240a5
+--- /dev/null
++++ b/sql/extras/characters-characters_fake-structure.sql
+@@ -0,0 +1,31 @@
++/*
++SQLyog Enterprise - MySQL GUI v8.18 
++MySQL - 5.5.31-0+wheezy1 : Database - fake_characters
++*********************************************************************
++*/
++
++/*!40101 SET NAMES utf8 */;
++
++/*!40101 SET SQL_MODE=''*/;
++
++/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
++/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
++/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
++/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
++/*Table structure for table `characters_fake` */
++
++DROP TABLE IF EXISTS `characters_fake`;
++
++CREATE TABLE `characters_fake` (
++  `name` varchar(36) NOT NULL,
++  `race` mediumint(3) NOT NULL DEFAULT '0',
++  `class` mediumint(3) NOT NULL DEFAULT '0',
++  `level` mediumint(3) NOT NULL DEFAULT '0',
++  `zone` mediumint(9) NOT NULL DEFAULT '0',
++  `gender` mediumint(3) NOT NULL DEFAULT '0'
++) ENGINE=MyISAM DEFAULT CHARSET=latin1;
++
++/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
++/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
++/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
++/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+diff --git a/sql/extras/characters_fake_readme.txt b/sql/extras/characters_fake_readme.txt
+new file mode 100644
+index 0000000..0d7ed99
+--- /dev/null
++++ b/sql/extras/characters_fake_readme.txt
+@@ -0,0 +1,18 @@
++Fake Characters instructions
++
++import either characters-characters_fake-structure.sql (for structure only. you will have to make fake players) or
++characters-characters_fake-full.sql (fake characters already created) into your characters database.
++
++Import trinity_string into your world database.
++
++world config file:
++
++#    Fake.WHO.List 
++#        Add fake players to fill in WHO LIST (who is online list, "O" button) if there is less then 
++#        49 real players online 
++#        Default: 0 (disabled) 
++#                 1 (enabled) 
++
++Fake.Who.List = 0
++
++0 is default and is turned off. change to 1 if you want the fake players to appear in the who list.
+\ No newline at end of file
+diff --git a/sql/extras/trinity_string_fake_players.sql b/sql/extras/trinity_string_fake_players.sql
+new file mode 100644
+index 0000000..eb1b129
+--- /dev/null
++++ b/sql/extras/trinity_string_fake_players.sql
+@@ -0,0 +1,8 @@
++/*
++SQLyog Enterprise - MySQL GUI v8.18 
++MySQL - 5.5.31-0+wheezy1 
++*********************************************************************
++*/
++/*!40101 SET NAMES utf8 */;
++
++insert into `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) values('12001','Player wishes to not be disturbed and cannot receive whisper messages.',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+diff --git a/src/server/game/Entities/Player/Player.cpp b/src/server/game/Entities/Player/Player.cpp
+index 2691a68..3591191 100644
+--- a/src/server/game/Entities/Player/Player.cpp
++++ b/src/server/game/Entities/Player/Player.cpp
+@@ -1778,6 +1778,10 @@ void Player::Update(uint32 p_time)
+             // m_nextSave reset in SaveToDB call
+             SaveToDB();
+             TC_LOG_DEBUG("entities.player", "Player '%s' (GUID: %u) saved", GetName().c_str(), GetGUIDLow());
++            // If Fake WHO List system on then change player position with every SavePlayer Interval (usually 15min) 
++            if (sWorld->getBoolConfig(CONFIG_FAKE_WHO_LIST)) 
++                CharacterDatabase.PExecute("UPDATE characters_fake SET zone = (FLOOR(50 * RAND()) + 1)"); 
++                CharacterDatabase.PExecute("UPDATE characters_fake SET level=level+1 WHERE level < 5");
+         }
+         else
+             m_nextSave -= p_time;
+diff --git a/src/server/game/Handlers/ChatHandler.cpp b/src/server/game/Handlers/ChatHandler.cpp
+index e0b2952..144806f 100644
+--- a/src/server/game/Handlers/ChatHandler.cpp
++++ b/src/server/game/Handlers/ChatHandler.cpp
+@@ -271,8 +271,17 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
+             Player* receiver = sObjectAccessor->FindPlayerByName(to);
+             if (!receiver || (!receiver->isAcceptWhispers() && receiver->GetSession()->HasPermission(rbac::RBAC_PERM_CAN_FILTER_WHISPERS) && !receiver->IsInWhisperWhiteList(sender->GetGUID())))
+             {
++                // If Fake WHO List system on then show player DND 
++                if (sWorld->getBoolConfig(CONFIG_FAKE_WHO_LIST)) 
++                { 
++                    sWorld->SendWorldText(LANG_NOT_WHISPER); 
++                    return; 
++                } 
++                else 
++                { 
+                 SendPlayerNotFoundNotice(to);
+                 return;
++                }
+             }
+             if (!sender->IsGameMaster() && sender->getLevel() < sWorld->getIntConfig(CONFIG_CHAT_WHISPER_LEVEL_REQ) && !receiver->IsInWhisperWhiteList(sender->GetGUID()))
+             {
+diff --git a/src/server/game/Handlers/MiscHandler.cpp b/src/server/game/Handlers/MiscHandler.cpp
+index 4fd1d51..6518466 100644
+--- a/src/server/game/Handlers/MiscHandler.cpp
++++ b/src/server/game/Handlers/MiscHandler.cpp
+@@ -368,8 +368,40 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
+ 
+         ++displaycount;
+     }
+-
+-    data.put(0, displaycount);                            // insert right count, count displayed
++    
++    if (sWorld->getBoolConfig(CONFIG_FAKE_WHO_LIST) && displaycount < 49) 
++    { 
++        // Fake players on WHO LIST                            0,   1,    2,   3,    4,   5
++        QueryResult result = CharacterDatabase.Query("SELECT name,race,class,level,zone,gender FROM characters_fake WHERE level > 3"); 
++        if (result) 
++        { 
++            do 
++            { 
++                Field *fields = result->Fetch(); 
++ 
++                std::string pname = fields[0].GetString();    // player name 
++                std::string gname;                                // guild name 
++                uint32 lvl = fields[3].GetUInt32();                // player level 
++                uint32 class_ = fields[2].GetUInt32();            // player class 
++                uint32 race = fields[1].GetUInt32();            // player race 
++                uint32 pzoneid = fields[4].GetUInt32();            // player zone id 
++                uint8 gender = fields[5].GetUInt8();            // player gender 
++ 
++                data << pname;                              // player name 
++                data << gname;                              // guild name 
++                data << uint32(lvl);                        // player level 
++                data << uint32(class_);                     // player class 
++                data << uint32(race);                       // player race 
++                data << uint8(gender);                      // player gender 
++                data << uint32(pzoneid);                    // player zone id 
++ 
++                if ((++matchcount) == 49) 
++                    break; 
++            } while (result->NextRow()); 
++        } 
++    } 
++ 
++    data.put(0, matchcount);                            // insert right count, count displayed
+     data.put(4, matchcount);                              // insert right count, count of matches
+ 
+     SendPacket(&data);
+diff --git a/src/server/game/Miscellaneous/Language.h b/src/server/game/Miscellaneous/Language.h
+index 3102e2c..8c33c94 100644
+--- a/src/server/game/Miscellaneous/Language.h
++++ b/src/server/game/Miscellaneous/Language.h
+@@ -1228,6 +1228,7 @@ enum TrinityStrings
+     LANG_BAN_ACCOUNT_YOUPERMBANNEDMESSAGE_WORLD   = 11007,
+ 
+     // NOT RESERVED IDS                   12000-1999999999
++    LANG_NOT_WHISPER                    = 12001, 
+     // `db_script_string` table index     2000000000-2000009999 (MIN_DB_SCRIPT_STRING_ID-MAX_DB_SCRIPT_STRING_ID)
+     // For other tables maybe             2000010000-2147483647 (max index)
+ };
+diff --git a/src/server/game/World/World.cpp b/src/server/game/World/World.cpp
+index 8f29418..e5ffc92 100644
+--- a/src/server/game/World/World.cpp
++++ b/src/server/game/World/World.cpp
+@@ -669,6 +669,7 @@ void World::LoadConfigSettings(bool reload)
+     m_bool_configs[CONFIG_ALLOW_TWO_SIDE_INTERACTION_GUILD]   = sConfigMgr->GetBoolDefault("AllowTwoSide.Interaction.Guild", false);
+     m_bool_configs[CONFIG_ALLOW_TWO_SIDE_INTERACTION_AUCTION] = sConfigMgr->GetBoolDefault("AllowTwoSide.Interaction.Auction", false);
+     m_bool_configs[CONFIG_ALLOW_TWO_SIDE_TRADE]               = sConfigMgr->GetBoolDefault("AllowTwoSide.trade", false);
++    m_bool_configs[CONFIG_FAKE_WHO_LIST]                      = sConfigMgr->GetBoolDefault("Fake.WHO.List", false);
+     m_int_configs[CONFIG_STRICT_PLAYER_NAMES]                 = sConfigMgr->GetIntDefault ("StrictPlayerNames",  0);
+     m_int_configs[CONFIG_STRICT_CHARTER_NAMES]                = sConfigMgr->GetIntDefault ("StrictCharterNames", 0);
+     m_int_configs[CONFIG_STRICT_PET_NAMES]                    = sConfigMgr->GetIntDefault ("StrictPetNames",     0);
+diff --git a/src/server/game/World/World.h b/src/server/game/World/World.h
+index a58dcc8..4f9b361 100644
+--- a/src/server/game/World/World.h
++++ b/src/server/game/World/World.h
+@@ -96,6 +96,7 @@ enum WorldBoolConfigs
+     CONFIG_ALLOW_TWO_SIDE_INTERACTION_GUILD,
+     CONFIG_ALLOW_TWO_SIDE_INTERACTION_AUCTION,
+     CONFIG_ALLOW_TWO_SIDE_TRADE,
++    CONFIG_FAKE_WHO_LIST,
+     CONFIG_ALL_TAXI_PATHS,
+     CONFIG_INSTANT_TAXI,
+     CONFIG_INSTANCE_IGNORE_LEVEL,
+diff --git a/src/server/worldserver/worldserver.conf.dist b/src/server/worldserver/worldserver.conf.dist
+index f71ef5d..d645f42 100644
+--- a/src/server/worldserver/worldserver.conf.dist
++++ b/src/server/worldserver/worldserver.conf.dist
+@@ -1205,6 +1205,14 @@ AllowTwoSide.Trade = 0
+ 
+ TalentsInspecting = 1
+ 
++#    Fake.WHO.List
++#        Add fake players to fill in WHO LIST (who is online list, "O" button) if there is less then
++#        49 real players online
++#        Default: 0 (disabled)
++#                 1 (enabled)
++
++Fake.Who.List = 0
++
+ #
+ ###################################################################################################
+ 
+-- 
+1.8.3.msysgit.0
+

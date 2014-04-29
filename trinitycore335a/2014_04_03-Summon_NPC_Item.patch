@@ -1,16 +1,40 @@
-From f46b6faec516478a16af29740c4bf047ac0bef75 Mon Sep 17 00:00:00 2001
+From a610a2fd1107cfd4fc0496b4ce3ff38e343d55ff Mon Sep 17 00:00:00 2001
 From: LordPsyan <realmsofwarcraft@gmail.com>
-Date: Sat, 1 Sep 2012 23:35:34 -0500
-Subject: [PATCH] 2012_09_01-Summon_NPC_Item
+Date: Thu, 3 Apr 2014 14:49:05 -0700
+Subject: [PATCH] 2014_04_03-Summon_NPC_Item
 
 ---
- src/server/scripts/Custom/CMakeLists.txt |    1 +
- src/server/scripts/Custom/summon.cpp     |   46 ++++++++++++++++++++++++++++++
- 2 files changed, 47 insertions(+), 0 deletions(-)
+ src/server/game/Scripting/ScriptLoader.cpp |  6 +++-
+ src/server/scripts/Custom/CMakeLists.txt   |  1 +
+ src/server/scripts/Custom/summon.cpp       | 46 ++++++++++++++++++++++++++++++
+ 3 files changed, 52 insertions(+), 1 deletion(-)
  create mode 100644 src/server/scripts/Custom/summon.cpp
 
+diff --git a/src/server/game/Scripting/ScriptLoader.cpp b/src/server/game/Scripting/ScriptLoader.cpp
+index 7365d59..49639f2 100644
+--- a/src/server/game/Scripting/ScriptLoader.cpp
++++ b/src/server/game/Scripting/ScriptLoader.cpp
+@@ -24,6 +24,9 @@ void AddSC_example_gossip_codebox();
+ void AddSC_example_misc();
+ void AddSC_example_commandscript();
+ 
++// Custom
++void AddSC_summon();
++
+ // spells
+ void AddSC_deathknight_spell_scripts();
+ void AddSC_druid_spell_scripts();
+@@ -1443,6 +1446,7 @@ void AddCustomScripts()
+ {
+ #ifdef SCRIPTS
+     /* This is where custom scripts should be added. */
+-
++    // IceRune
++    AddSC_summon();
+ #endif
+ }
 diff --git a/src/server/scripts/Custom/CMakeLists.txt b/src/server/scripts/Custom/CMakeLists.txt
-index 62abde2..136c5d7 100644
+index 78db719..dda7c22 100644
 --- a/src/server/scripts/Custom/CMakeLists.txt
 +++ b/src/server/scripts/Custom/CMakeLists.txt
 @@ -10,6 +10,7 @@
@@ -23,7 +47,7 @@ index 62abde2..136c5d7 100644
  message("  -> Prepared: Custom")
 diff --git a/src/server/scripts/Custom/summon.cpp b/src/server/scripts/Custom/summon.cpp
 new file mode 100644
-index 0000000..aa0e9cd
+index 0000000..5dbbd8a
 --- /dev/null
 +++ b/src/server/scripts/Custom/summon.cpp
 @@ -0,0 +1,46 @@
@@ -38,7 +62,7 @@ index 0000000..aa0e9cd
 +                bool OnUse(Player* pPlayer, Item* pItem, SpellCastTargets const& /*targets*/)
 +                {
 +   uint32 sSpell = 18282; //Icerune Visual Spell when used
-+   if (pPlayer->isInCombat())
++   if (pPlayer->IsInCombat())
 +   {
 +        pPlayer->GetSession()->SendNotification("You are in combat.");
 +   }
@@ -50,7 +74,7 @@ index 0000000..aa0e9cd
 +  
 +   else if (pPlayer->FindNearestCreature(80410, 40) || pPlayer->FindNearestCreature(100000, 8))
 +   {
-+        pPlayer->GetSession()->SendNotification("Sister Sin can not be summoned right now.");
++        pPlayer->GetSession()->SendNotification("Teleportercan not be summoned because another Teleporter is within range.");
 +   }
 +  
 +   else
@@ -62,7 +86,7 @@ index 0000000..aa0e9cd
 +        else
 +         o = o + 3.141592;
 +        pPlayer->GetClosePoint(x, y, z, pPlayer->GetObjectSize());
-+        Creature* pCreature = pPlayer->SummonCreature(100000, x, y, z+1.2, o, TEMPSUMMON_TIMED_DESPAWN, 480000);
++        Creature* pCreature = pPlayer->SummonCreature(100000, x, y, z+2.2, o, TEMPSUMMON_TIMED_DESPAWN, 5000);
 +        pCreature->CastSpell(pCreature, 63660);
 +        return false;
 +   }
@@ -75,5 +99,5 @@ index 0000000..aa0e9cd
 +}
 \ No newline at end of file
 -- 
-1.7.2.5
+1.8.1.msysgit.1
 

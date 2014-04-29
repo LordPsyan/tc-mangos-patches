@@ -1,50 +1,50 @@
-From 957ec04d8fe487643ac31bb3732d627365aadf58 Mon Sep 17 00:00:00 2001
+From c50b5b1233de940cae440801d11bdb4d03910431 Mon Sep 17 00:00:00 2001
 From: LordPsyan <realmsofwarcraft@gmail.com>
-Date: Mon, 3 Sep 2012 01:56:21 -0500
-Subject: [PATCH] 2012_09_03-Fatigue
+Date: Thu, 3 Apr 2014 12:01:59 -0700
+Subject: [PATCH] 2014_04_03-Fatigue
 
 ---
- src/server/game/Entities/Player/Player.cpp   |   11 +++++++++--
- src/server/worldserver/worldserver.conf.dist |    7 +++++++
+ src/server/game/Entities/Player/Player.cpp   | 11 +++++++++--
+ src/server/worldserver/worldserver.conf.dist |  7 +++++++
  2 files changed, 16 insertions(+), 2 deletions(-)
 
 diff --git a/src/server/game/Entities/Player/Player.cpp b/src/server/game/Entities/Player/Player.cpp
-index 65f6588..fb33fef 100755
+index e8bb798..c1883af 100644
 --- a/src/server/game/Entities/Player/Player.cpp
 +++ b/src/server/game/Entities/Player/Player.cpp
-@@ -76,6 +76,7 @@
- #include "AccountMgr.h"
- #include "Battlefield.h"
- #include "BattlefieldMgr.h"
+@@ -78,6 +78,7 @@
+ #include "WorldPacket.h"
+ #include "WorldSession.h"
+ #include "GameObjectAI.h"
 +#include "Config.h"
  
  #define ZONE_UPDATE_INTERVAL (1*IN_MILLISECONDS)
  
-@@ -1315,9 +1316,12 @@ int32 Player::getMaxTimer(MirrorTimerType timer)
+@@ -1333,9 +1334,12 @@ int32 Player::getMaxTimer(MirrorTimerType timer)
  {
      switch (timer)
      {
-+	if(ConfigMgr::GetBoolDefault("fatigue.enabled", true)) // If "fatigue.enabled" is enabled
-+		{
++    if(sConfigMgr->GetBoolDefault("fatigue.enabled", true)) // If "fatigue.enabled" is enabled
++        {
          case FATIGUE_TIMER:
              return MINUTE * IN_MILLISECONDS;
 -        case BREATH_TIMER:
-+		}
-+		case BREATH_TIMER:
++        }
++        case BREATH_TIMER:
          {
-             if (!isAlive() || HasAuraType(SPELL_AURA_WATER_BREATHING) || GetSession()->GetSecurity() >= AccountTypes(sWorld->getIntConfig(CONFIG_DISABLE_BREATHING)))
+             if (!IsAlive() || HasAuraType(SPELL_AURA_WATER_BREATHING) || GetSession()->GetSecurity() >= AccountTypes(sWorld->getIntConfig(CONFIG_DISABLE_BREATHING)))
                  return DISABLED_MIRROR_TIMER;
-@@ -1387,6 +1391,9 @@ void Player::HandleDrowning(uint32 time_diff)
+@@ -1417,6 +1421,9 @@ void Player::HandleDrowning(uint32 time_diff)
      }
  
      // In dark water
-+if(ConfigMgr::GetBoolDefault("fatigue.enabled", true)) // If "fatigue.enabled" is enabled
++if(sConfigMgr->GetBoolDefault("fatigue.enabled", true)) // If "fatigue.enabled" is enabled
 +{
 +
      if (m_MirrorTimerFlags & UNDERWARER_INDARKWATER)
      {
          // Fatigue timer not activated - activate it
-@@ -1423,7 +1430,7 @@ void Player::HandleDrowning(uint32 time_diff)
+@@ -1453,7 +1460,7 @@ void Player::HandleDrowning(uint32 time_diff)
          else if (m_MirrorTimerFlagsLast & UNDERWARER_INDARKWATER)
              SendMirrorTimer(FATIGUE_TIMER, DarkWaterTime, m_MirrorTimer[FATIGUE_TIMER], 10);
      }
@@ -54,10 +54,10 @@ index 65f6588..fb33fef 100755
      {
          // Breath timer not activated - activate it
 diff --git a/src/server/worldserver/worldserver.conf.dist b/src/server/worldserver/worldserver.conf.dist
-index ce65517..08cea37 100644
+index 1762859..ff98e7b 100644
 --- a/src/server/worldserver/worldserver.conf.dist
 +++ b/src/server/worldserver/worldserver.conf.dist
-@@ -846,6 +846,13 @@ InstantLogout = 1
+@@ -829,6 +829,13 @@ RecruitAFriend.MaxDifference = 4
  DisableWaterBreath = 4
  
  #
@@ -72,5 +72,5 @@ index ce65517..08cea37 100644
  #        Description: Character knows all flight paths (of both factions) after creation.
  #        Default:     0 - (Disabled)
 -- 
-1.7.2.5
+1.8.1.msysgit.1
 
