@@ -1,0 +1,103 @@
+From 82becf722b24302b3ca726ce0ff6b0b72b4a85cb Mon Sep 17 00:00:00 2001
+From: LordPsyan <realmsofwarcraft@gmail.com>
+Date: Mon, 19 Dec 2016 12:05:21 -0600
+Subject: [PATCH] 2016_12_19-fatigue
+
+---
+ src/game/Object/Player.cpp       | 9 +++++++++
+ src/game/WorldHandlers/World.cpp | 1 +
+ src/game/WorldHandlers/World.h   | 1 +
+ src/mangosd/mangosd.conf.dist.in | 8 ++++++++
+ 4 files changed, 19 insertions(+)
+
+diff --git a/src/game/Object/Player.cpp b/src/game/Object/Player.cpp
+index 476f346..af7e649 100644
+--- a/src/game/Object/Player.cpp
++++ b/src/game/Object/Player.cpp
+@@ -990,10 +990,13 @@ int32 Player::getMaxTimer(MirrorTimerType timer)
+ {
+     switch (timer)
+     {
++        if (sWorld.getConfig(CONFIG_BOOL_TIMERBAR_FATIGUE_ONOFF))
++        {
+         case FATIGUE_TIMER:
+             if (GetSession()->GetSecurity() >= (AccountTypes)sWorld.getConfig(CONFIG_UINT32_TIMERBAR_FATIGUE_GMLEVEL))
+                 { return DISABLED_MIRROR_TIMER; }
+             return sWorld.getConfig(CONFIG_UINT32_TIMERBAR_FATIGUE_MAX) * IN_MILLISECONDS;
++        }
+         case BREATH_TIMER:
+         {
+             if (!IsAlive() || HasAuraType(SPELL_AURA_WATER_BREATHING) ||
+@@ -1069,6 +1072,8 @@ void Player::HandleDrowning(uint32 time_diff)
+     if (m_MirrorTimerFlags & UNDERWATER_INDARKWATER)
+     {
+         // Fatigue timer not activated - activate it
++        if (sWorld.getConfig(CONFIG_BOOL_TIMERBAR_FATIGUE_ONOFF))
++        {
+         if (m_MirrorTimer[FATIGUE_TIMER] == DISABLED_MIRROR_TIMER)
+         {
+             m_MirrorTimer[FATIGUE_TIMER] = getMaxTimer(FATIGUE_TIMER);
+@@ -1092,15 +1097,19 @@ void Player::HandleDrowning(uint32 time_diff)
+             else if (!(m_MirrorTimerFlagsLast & UNDERWATER_INDARKWATER))
+                 { SendMirrorTimer(FATIGUE_TIMER, getMaxTimer(FATIGUE_TIMER), m_MirrorTimer[FATIGUE_TIMER], -1); }
+         }
++        }
+     }
+     else if (m_MirrorTimer[FATIGUE_TIMER] != DISABLED_MIRROR_TIMER)       // Regen timer
+     {
++        if (sWorld.getConfig(CONFIG_BOOL_TIMERBAR_FATIGUE_ONOFF))
++        {
+         int32 DarkWaterTime = getMaxTimer(FATIGUE_TIMER);
+         m_MirrorTimer[FATIGUE_TIMER] += 10 * time_diff;
+         if (m_MirrorTimer[FATIGUE_TIMER] >= DarkWaterTime || !IsAlive())
+             { StopMirrorTimer(FATIGUE_TIMER); }
+         else if (m_MirrorTimerFlagsLast & UNDERWATER_INDARKWATER)
+             { SendMirrorTimer(FATIGUE_TIMER, DarkWaterTime, m_MirrorTimer[FATIGUE_TIMER], 10); }
++        }
+     }
+ 
+     if (m_MirrorTimerFlags & (UNDERWATER_INLAVA /*| UNDERWATER_INSLIME*/) && !(m_lastLiquid && m_lastLiquid->SpellId))
+diff --git a/src/game/WorldHandlers/World.cpp b/src/game/WorldHandlers/World.cpp
+index 3ff73b3..35ecb14 100644
+--- a/src/game/WorldHandlers/World.cpp
++++ b/src/game/WorldHandlers/World.cpp
+@@ -751,6 +751,7 @@ void World::LoadConfigSettings(bool reload)
+     setConfigMin(CONFIG_UINT32_GUILD_EVENT_LOG_COUNT, "Guild.EventLogRecordsCount", GUILD_EVENTLOG_MAX_RECORDS, GUILD_EVENTLOG_MAX_RECORDS);
+     setConfigMin(CONFIG_UINT32_GUILD_BANK_EVENT_LOG_COUNT, "Guild.BankEventLogRecordsCount", GUILD_BANK_MAX_LOGS, GUILD_BANK_MAX_LOGS);
+ 
++    setConfig(CONFIG_BOOL_TIMERBAR_FATIGUE_ONOFF, "fatigue.enabled", true);
+     setConfig(CONFIG_UINT32_TIMERBAR_FATIGUE_GMLEVEL, "TimerBar.Fatigue.GMLevel", SEC_CONSOLE);
+     setConfig(CONFIG_UINT32_TIMERBAR_FATIGUE_MAX,     "TimerBar.Fatigue.Max", 60);
+     setConfig(CONFIG_UINT32_TIMERBAR_BREATH_GMLEVEL,  "TimerBar.Breath.GMLevel", SEC_CONSOLE);
+diff --git a/src/game/WorldHandlers/World.h b/src/game/WorldHandlers/World.h
+index 326b694..474c07a 100644
+--- a/src/game/WorldHandlers/World.h
++++ b/src/game/WorldHandlers/World.h
+@@ -183,6 +183,7 @@ enum eConfigUInt32Values
+     CONFIG_UINT32_CLIENTCACHE_VERSION,
+     CONFIG_UINT32_GUILD_EVENT_LOG_COUNT,
+     CONFIG_UINT32_GUILD_BANK_EVENT_LOG_COUNT,
++    CONFIG_BOOL_TIMERBAR_FATIGUE_ONOFF,
+     CONFIG_UINT32_TIMERBAR_FATIGUE_GMLEVEL,
+     CONFIG_UINT32_TIMERBAR_FATIGUE_MAX,
+     CONFIG_UINT32_TIMERBAR_BREATH_GMLEVEL,
+diff --git a/src/mangosd/mangosd.conf.dist.in b/src/mangosd/mangosd.conf.dist.in
+index aa41946..6d4c864 100644
+--- a/src/mangosd/mangosd.conf.dist.in
++++ b/src/mangosd/mangosd.conf.dist.in
+@@ -1844,3 +1844,11 @@ Warden.DBLogLevel            = 0
+ Eluna.Enabled    = 1
+ Eluna.TraceBack  = false
+ Eluna.ScriptPath = "lua_scripts"
++
++###################################################################################################################
++#    Enable or Disable "Fatigue" timer
++#           default = 1 (enabled)
++#                   = 0 (disabled)
++###################################################################################################################
++
++fatigue.enabled = 1
+\ No newline at end of file
+-- 
+2.1.4
+
